@@ -1,8 +1,9 @@
 import { Provider, connect } from "react-redux";
 import { applyMiddleware, combineReducers, createStore as cs } from "redux";
 import thunk from "redux-thunk";
+import defaultState from '../../src/state.json';
 
-function connects(defaultState, App) {
+function connects(App) {
     return connect((state) => {
         return Object.assign({}, defaultState, state.HomeReducer);
     }, {
@@ -14,7 +15,7 @@ function connects(defaultState, App) {
     })(App);
 }
 
-function creteStore(defaultState, App) {
+function creteStore() {
     function HomeReducer(state = defaultState, action) {
         switch (action.type) {
             case 'UPDATE_STATE':
@@ -27,14 +28,11 @@ function creteStore(defaultState, App) {
         HomeReducer
     });
     const store = cs(reducers, applyMiddleware(thunk));
-    return (
-        <Provider store={store}>
-            <App />
-        </Provider>
-    );
+    return store;
 }
 
 export {
     connects,
-    creteStore
+    creteStore,
+    Provider
 }
